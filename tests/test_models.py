@@ -5,8 +5,14 @@ import json
 from jsondb import models, utils
 
 class C(object):
-    def __init__(self,arg):
+    def __init__(self,arg=None):
         self.arg = arg
+
+    def sample_method(self):
+        return "hello!"
+
+    def __repr__(self):
+        return u"<C: arg={0}>".format(self.arg)
 
 class JSONdbTest(unittest.TestCase):
 
@@ -16,6 +22,7 @@ class JSONdbTest(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.db.dbpath)
+        pass
 
     def add_some_to_db(self):
         self.db.add(self.sample_data[0])
@@ -29,15 +36,21 @@ class JSONdbTest(unittest.TestCase):
     def test_db_add(self):
         self.db.add(self.sample_data[0])
         self.assertTrue('test_models.C' in self.db.tables)
-        self.assertTrue(os.path.exists(os.path.sep.join(('test_db', 'test_models', 'C.json'))))
+        self.assertTrue(os.path.exists(os.path.sep.join(('test_db',
+            'test_models', 'C.json'))))
 
     def test_savedb(self):
         self.add_some_to_db()
         with open(os.path.sep.join(('test_db', 'test_models', 'C.json'))) as f:
             data = f.read()
             recovered_data = json.loads(data)
-            self.assertIsNotNone(recovered_data, "Could not get back the json data. Corruption when saving.\nGot: \"{0}\"".format(data))
+            self.assertIsNotNone(recovered_data,
+                "Could not get back the json data. Corruption when saving.\nGot: \"{0}\"".format(data))
 
     def test_db_load(self):
         self.add_some_to_db()
-        self.assertIsNotNone(self.db.get(clazz=C, index=0))
+        res = self.db.get(clazz=C, arg="hello")
+        self.assertNotEqual(res, [])
+        print(res)
+        self.assertEqual(res.arg, self.sample_data[0])
+
