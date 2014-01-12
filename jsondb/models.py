@@ -5,8 +5,19 @@ import json
 
 from jsondb import logger
 from jsondb import utils
-
 class JSONdb(object):
+    class Filter(object):
+        def __init__(self, field, expected):
+            self.field = field
+            self.expected = expected
+
+        def validate(self, obj):
+            if(hasattr(obj, self.field)):
+                if(obj.__dict__[self.field] == self.expected):
+                    return True
+            return False
+
+
     def __init__(self, dbpath):
         self.dbpath = dbpath
         self.tables = {}
@@ -54,10 +65,20 @@ class JSONdb(object):
         classpath = utils.get_classpath(clazz).replace(os.path.sep, '.')
         data = self.tables[classpath]
         objects = []
+        filters = []
+        for field, expected in kwargs.items():
+            filters.append(JSONdb.Filter(field, expected))
+
+        def is_valid(obj):
+            for filter in filters:
+                if(not filter.validate(obj)):
+                    return False
+            return True
         for d in data:
             obj = clazz()
             obj.__dict__.update(d)
-            objects.append(obj)
+            if(is_valid(obj)):
+                objects.append(obj)
         return objects
 
 

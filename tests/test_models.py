@@ -51,6 +51,7 @@ class JSONdbTest(unittest.TestCase):
         self.add_some_to_db()
         res = self.db.get(clazz=C, arg="hello")
         self.assertNotEqual(res, [])
+        self.assertEqual(len(res), 1)
         print(res)
-        self.assertEqual(res.arg, self.sample_data[0])
+        self.assertEqual(res[0].arg, self.sample_data[0].arg)
 
