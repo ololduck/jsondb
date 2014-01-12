@@ -9,6 +9,6 @@ setup(name='jsondb',
       author='Paul Ollivier',
       author_email='contact@paulollivier.fr',
       url='https://github.com/paulollivier/jsondb',
-      packages=['jsondb'],
+      packages=['jsondb',],
      )
 

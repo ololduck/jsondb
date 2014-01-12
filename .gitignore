@@ -4,3 +4,6 @@
 # python
 *.py[co]
 
+# tests
+/.coverage
+/cover
