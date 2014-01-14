@@ -47,6 +47,12 @@ class JSONdbTest(unittest.TestCase):
             self.assertIsNotNone(recovered_data,
                 "Could not get back the json data. Corruption when saving.\nGot: \"{0}\"".format(data))
 
+    def test_get_without_add(self):
+        try:
+            self.assertTrue(self.db.get(C, arg="hello") == [])
+        except KeyError as e:
+            self.fail("KeyError! We could not fetch the data!")
+
     def test_db_load(self):
         self.add_some_to_db()
         res = self.db.get(clazz=C, arg="hello")

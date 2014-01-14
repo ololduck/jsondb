@@ -50,7 +50,20 @@ class JSONdb(object):
         for key, value in self.tables.items():
             self.save_table(key.replace('.', os.path.sep), value)
 
+    def _check_if_obj_has_not_primitive_fields(self, obj):
+        outcasts = []
+        for key, value in obj.__dict__.items():
+            if(type(value) not in (int, float, bool, dict, list, str)):
+                # the it is not a primitive type
+                outcasts.append({key: value})
+        if(outcasts == []): return None
+        return outcasts
+
     def add(self, obj):
+        outcasts = self._check_if_obj_has_not_primitive_fields(obj)
+        if(outcasts != None):
+            for key, value in outcasts.items():
+                pass
         classpath = utils.get_classpath(obj)
         if(classpath.replace(os.path.sep, '.') not in self.tables):
             self.tables.update({classpath.replace(os.path.sep, '.'): []})
