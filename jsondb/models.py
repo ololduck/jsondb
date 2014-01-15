@@ -135,19 +135,27 @@ class JSONdb(object):
                 if(not filter.validate(obj)):
                     return False
             return True
+        logger.debug("found objects {0}, who must match {1}".format(data, filters))
         for d in data:
-            if('jsondb_id' in d):
-                del d['jsondb_id']
+            logger.debug("treating object {0}".format(d))
             obj = clazz()
             obj.__dict__.update(d)
             if(is_valid(obj)):
+                logger.debug("object {0} is valid!".format(obj.__dict__))
                 for field in self._get_relational_fields(obj):
                     # load the object's class, and get it
-                    pass
+                    classname = obj.__dict__[field][obj.__dict__[field].find('(')+1:obj.__dict__[field].find(';')]
+                    jsondb_id = int(obj.__dict__[field][obj.__dict__[field].find(';')+1:obj.__dict__[field].find(')')])
+                    logger.debug("obj to load: {0}:{1}".format(classname, jsondb_id))
+                    obj_loaded = self.get(utils.class_import(classname), jsondb_id=jsondb_id)
+                    if(obj_loaded == []):
+                        logger.error("We could not load field {0} of object {1}! get returned []".format(field, obj.__dict__))
+                    obj.__dict__[field] = obj_loaded[0]
+
+                if('jsondb_id' in obj.__dict__):
+                    del obj.__dict__['jsondb_id']
                 objects.append(obj)
         return objects
 
-    def relget(self, clazz, **kwargs):
-        return []
 
 

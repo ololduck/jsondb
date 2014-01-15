@@ -35,3 +35,10 @@ def make_path(path):
         if(not os.path.exists(os.path.sep.join(current))):
             os.mkdir(os.path.sep.join(current))
         done.append(path)
+
+def class_import(name):
+    mod_str = name[:name.rfind('.')]
+    class_str = name[name.rfind('.')+1:]
+    mod = __import__(mod_str, fromlist=[class_str])
+    cl = getattr(mod, class_str)
+    return cl

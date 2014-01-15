@@ -1,6 +1,5 @@
 import unittest
 import shutil
-import json
 import jsondb
 
 class C(object):
@@ -28,7 +27,7 @@ class RelationalDBTest(unittest.TestCase):
 
     def test_relational_model_load(self):
         self.test_relational_model_save()
-        got_c = self.db.relget(C)
+        got_c = self.db.get(C)
         self.assertNotEqual(got_c, [])
         c = got_c[0]
         self.assertNotEqual(c.arg, None)
