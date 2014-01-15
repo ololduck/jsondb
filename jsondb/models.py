@@ -26,14 +26,12 @@ class JSONdb(object):
         self.loaddb()
 
     def loaddb(self):
-        def class_loader_visitor(arg, dirname, names):
-            for name in names:
-                with open(os.path.sep.join((dirname, name))) as f:
+        for root, dirs, files in os.walk(self.dbpath):
+            for f in files:
+                with open(os.path.sep.join((root, f))) as fil:
                     self.tables.update(
-                        {'.'.join((dirname.replace(os.path.sep, '.'), name)):
-                        json.loads(f.read())})
-
-        os.walk(self.dbpath, class_loader_visitor, None)
+                        {'.'.join((root.replace(os.path.sep, '.'), f)):
+                        json.loads(fil.read())})
 
     def save_table(self, table_name):
         logger.info("saving table {0}".format(table_name))
@@ -50,20 +48,8 @@ class JSONdb(object):
         for key, value in self.tables.items():
             self.save_table(key.replace('.', os.path.sep), value)
 
-    def _check_if_obj_has_not_primitive_fields(self, obj):
-        outcasts = []
-        for key, value in obj.__dict__.items():
-            if(type(value) not in (int, float, bool, dict, list, str)):
-                # the it is not a primitive type
-                outcasts.append({key: value})
-        if(outcasts == []): return None
-        return outcasts
 
     def add(self, obj):
-        outcasts = self._check_if_obj_has_not_primitive_fields(obj)
-        if(outcasts != None):
-            for key, value in outcasts.items():
-                pass
         classpath = utils.get_classpath(obj)
         if(classpath.replace(os.path.sep, '.') not in self.tables):
             self.tables.update({classpath.replace(os.path.sep, '.'): []})
@@ -76,6 +62,8 @@ class JSONdb(object):
         # Or a filter system ~=chain of responsability?
         # Yeah, filter system, let's go.
         classpath = utils.get_classpath(clazz).replace(os.path.sep, '.')
+        if(classpath not in self.tables):
+            return []
         data = self.tables[classpath]
         objects = []
         filters = []

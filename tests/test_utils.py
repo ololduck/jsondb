@@ -27,7 +27,7 @@ class UtilsTest(unittest.TestCase):
             p, os.path.sep.join(('db', 'datetime', 'datetime')) + ".json")
 
     def test_makepath(self):
-        path = 'hello/world/hello'
+        path = os.path.sep.join(("hello", "world", "hello"))
         self.assertFalse(os.path.exists(path))
         utils.make_path(path)
         self.assertTrue(os.path.exists(path))
