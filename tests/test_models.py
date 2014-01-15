@@ -50,7 +50,7 @@ class JSONdbTest(unittest.TestCase):
     def test_get_without_add(self):
         try:
             self.assertTrue(self.db.get(C, arg="hello") == [])
-        except KeyError as e:
+        except KeyError:
             self.fail("KeyError! We could not fetch the data!")
 
     def test_db_load(self):
