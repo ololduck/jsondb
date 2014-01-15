@@ -3,6 +3,8 @@
 
 # python
 *.py[co]
+/dist
+/MANIFEST
 
 # tests
 /.coverage
