@@ -1,3 +1,4 @@
+# -*- coding:utf8 -*-
 import unittest
 import shutil
 import jsondb
@@ -33,3 +34,5 @@ class RelationalDBTest(unittest.TestCase):
         self.assertNotEqual(c.arg, None)
         self.assertEqual(c.arg.__class__, A)
         self.assertEqual(c.arg.arg, "Hello")
+        # test f there is no remaining jsondb_id
+        self.assertNotIn('jsondb_id', c.arg.__dict__)

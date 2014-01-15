@@ -1,4 +1,4 @@
-__version__ = '0.0.2+alpha.0'
+__version__ = '0.0.2+beta.0'
 
 import logging
 

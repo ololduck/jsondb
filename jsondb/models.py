@@ -118,6 +118,7 @@ class JSONdb(object):
         return fields
 
     def get(self, clazz, **kwargs):
+        # We need to test if we have the same id in the same table. highly unlikely, but still.
         # Here, we should use the visitor pattern, maybe?
         # Or a filter system ~=chain of responsability?
         # Yeah, filter system, let's go.
