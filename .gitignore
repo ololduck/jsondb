@@ -9,3 +9,6 @@
 # tests
 /.coverage
 /cover
+
+# docs
+/docs/_build
