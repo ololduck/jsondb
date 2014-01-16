@@ -41,6 +41,7 @@ class JSONdbTest(unittest.TestCase):
 
     def test_savedb(self):
         self.add_some_to_db()
+        self.db.savedb()
         with open(os.path.sep.join(('test_db', 'test_models', 'C.json'))) as f:
             data = f.read()
             recovered_data = json.loads(data)
@@ -48,10 +49,7 @@ class JSONdbTest(unittest.TestCase):
                 "Could not get back the json data. Corruption when saving.\nGot: \"{0}\"".format(data))
 
     def test_get_without_add(self):
-        try:
-            self.assertTrue(self.db.get(C, arg="hello") == [])
-        except KeyError:
-            self.fail("KeyError! We could not fetch the data!")
+        self.assertTrue(self.db.get(C, arg="hello") == [])
 
     def test_db_load(self):
         self.add_some_to_db()
@@ -60,4 +58,9 @@ class JSONdbTest(unittest.TestCase):
         self.assertEqual(len(res), 1)
         print(res)
         self.assertEqual(res[0].arg, self.sample_data[0].arg)
+
+    def test_invalid_get(self):
+        self.add_some_to_db()
+        res = self.db.get(C, non_existent_field="non_existent_data")
+        self.assertEqual(res, [])
 

@@ -15,10 +15,7 @@ The main usage is simple: You instanciate a JSONdb object, and then use the meth
 
 This module is fully documented with inner doc, so you can use it in a repl.
 
-Full documentation
-------------------
-
-.. include:: modules.rst
+Full documentation: :ref:`jsondb_package`
 
 
 Indices and tables

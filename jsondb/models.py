@@ -8,6 +8,9 @@ import sys
 from jsondb import logger
 from jsondb import utils
 
+class ConsistencyError(Exception):
+    pass
+
 class JSONdb(object):
     """
     Main db class.
@@ -68,9 +71,9 @@ class JSONdb(object):
             f.write(json.dumps(self.tables.get(table_key),
                 sort_keys=True, indent=2))
 
-    def _savedb(self):
+    def savedb(self):
         for key, value in self.tables.items():
-            self._save_table(key.replace('.', os.path.sep), value)
+            self._save_table(key.replace('.', os.path.sep))
 
     def _check_if_obj_has_not_primitive_fields(self, obj):
         '''
@@ -208,7 +211,7 @@ class JSONdb(object):
                     obj_loaded = self.get(
                         utils.class_import(classname), jsondb_id=jsondb_id)
                     if(obj_loaded == []):
-                        logger.error("We could not load field {0}\
+                        raise ConsistencyError("We could not load field {0}\
                          of object {1}! get returned []".format(
                             field, obj.__dict__))
                     obj.__dict__[field] = obj_loaded[0]

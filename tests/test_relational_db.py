@@ -2,6 +2,7 @@
 import unittest
 import shutil
 import jsondb
+from jsondb import models
 
 class C(object):
     def __init__(self, arg=None):
@@ -36,3 +37,9 @@ class RelationalDBTest(unittest.TestCase):
         self.assertEqual(c.arg.arg, "Hello")
         # test f there is no remaining jsondb_id
         self.assertNotIn('jsondb_id', c.arg.__dict__)
+
+    def test_integrity_error(self):
+        a = A("<jsondb_id:(test_relational_db.C;0001)>")
+        self.db.add(a)
+        with self.assertRaises(models.ConsistencyError):
+            self.db.get(A)

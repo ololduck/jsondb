@@ -5,4 +5,4 @@ import logging
 logger = logging.getLogger('jsondb')
 
 import utils
-from .models import JSONdb
+from .models import JSONdb, ConsistencyError

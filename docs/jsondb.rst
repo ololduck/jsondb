@@ -1,3 +1,5 @@
+.. _jsondb_package:
+
 jsondb package
 ==============
 
